@@ -1,5 +1,15 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ProductCategory } from 'src/apis/productCategory/entities/productCategory.entity';
+import { ProductEvaluation } from 'src/apis/productEvaluation/entities/productEvaluation.entity';
+import { ProductTag } from 'src/apis/productTag/entities/productTag.entity';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -40,9 +50,20 @@ export class Product {
   @Field(() => Boolean)
   isSoldout: boolean;
 
-  // category
+  @ManyToOne(() => ProductCategory)
+  @Field(() => ProductCategory)
+  prdocutCategory: ProductCategory;
 
-  // productTag
+  @OneToMany(
+    () => ProductEvaluation,
+    (productEvaluation) => productEvaluation.product,
+  )
+  @Field(() => ProductEvaluation, { nullable: true })
+  productEvaluation: ProductEvaluation;
+
+  @ManyToMany(() => ProductTag, (productTag) => productTag.products)
+  @Field(() => [ProductTag])
+  productTag: ProductTag[];
 
   // productCart
 }
