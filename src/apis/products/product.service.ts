@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
@@ -24,5 +24,31 @@ export class ProductService {
     });
   }
 
-  update({ prductId, updateProductInput }) {}
+  async update({ productId, updateProductInput }) {
+    const product = await this.productRepositoty.findOne({
+      where: { id: productId },
+    });
+    // const newProduct = {
+    //   ...product,
+    //   ...updateProductInput,
+    // };
+    return await this.productRepositoty.save({
+      ...product,
+      ...updateProductInput,
+    });
+  }
+
+  async checkSoldout({ productId }) {
+    const product = await this.productRepositoty.findOne({
+      where: { id: productId },
+    });
+    if (product.productDetail.isSoldout) {
+      throw new UnprocessableEntityException('이미 판매되었습니다.');
+    }
+  }
+
+  async delete({ productId }) {
+    const result = await this.productRepositoty.softDelete({ id: productId });
+    return result.affected ? true : false;
+  }
 }
