@@ -2,44 +2,69 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ProductCategory {
+  id: String!
+  name: String!
+}
+
+type ProductDetail {
+  id: String!
+  size: String!
+  color: String!
+  isSoldout: Boolean!
+  stock: Int!
+}
+
+type ProductEvaluation {
+  id: String!
+  review: String!
+  grade: Int!
+  product: Product
+}
+
+type ProductTag {
+  id: String!
+  tagName: String!
+  product: [Product!]!
+}
+
 type Product {
   id: String!
   productName: String!
   desc: String!
   price: Int!
-  size: String!
   brand: String!
-  color: String!
-  stock: Int!
-  isSoldout: Boolean!
+  productDetail: ProductDetail!
+  productCategory: ProductCategory!
+  productEvaluation: ProductEvaluation
+  productTag: [ProductTag!]!
 }
 
 type Query {
+  fetchCategory(productCategoryId: String!): ProductCategory!
+  fetchCategories: [ProductCategory!]!
   fetchProducts: [Product!]!
   fetchProduct(productId: String!): Product!
 }
 
 type Mutation {
+  createCategory(name: String!): ProductCategory!
+  deleteCategory(productId: String!): String!
   createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(prductId: String!, updateProductInput: UpdateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  deleteProduct(productId: String!): Boolean!
 }
 
 input CreateProductInput {
   productName: String!
   desc: String!
   price: Int!
-  size: String!
   brand: String!
-  color: String!
-  stock: Int!
 }
 
 input UpdateProductInput {
   productName: String
   desc: String
   price: Int
-  size: String
   brand: String
-  color: String
-  stock: Int
 }
