@@ -1,13 +1,18 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ProductCategory } from 'src/apis/productCategory/entities/productCategory.entity';
+import { ProductDetail } from 'src/apis/productDetail/entities/productDetail.entity';
 import { ProductEvaluation } from 'src/apis/productEvaluation/entities/productEvaluation.entity';
 import { ProductTag } from 'src/apis/productTag/entities/productTag.entity';
+
 import {
   Column,
+  DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -32,27 +37,19 @@ export class Product {
 
   @Column()
   @Field(() => String)
-  size: string;
-
-  @Column()
-  @Field(() => String)
   brand: string;
 
-  @Column()
-  @Field(() => String)
-  color: string;
+  @DeleteDateColumn()
+  deletedAt: Date;
 
-  @Column()
-  @Field(() => Int)
-  stock: number;
-
-  @Column({ default: false })
-  @Field(() => Boolean)
-  isSoldout: boolean;
+  @JoinColumn()
+  @OneToOne(() => ProductDetail)
+  @Field(() => ProductDetail)
+  productDetail: ProductDetail;
 
   @ManyToOne(() => ProductCategory)
   @Field(() => ProductCategory)
-  prdocutCategory: ProductCategory;
+  productCategory: ProductCategory;
 
   @OneToMany(
     () => ProductEvaluation,
@@ -61,7 +58,8 @@ export class Product {
   @Field(() => ProductEvaluation, { nullable: true })
   productEvaluation: ProductEvaluation;
 
-  @ManyToMany(() => ProductTag, (productTag) => productTag.products)
+  @JoinColumn()
+  @ManyToMany(() => ProductTag, (productTag) => productTag.product)
   @Field(() => [ProductTag])
   productTag: ProductTag[];
 
