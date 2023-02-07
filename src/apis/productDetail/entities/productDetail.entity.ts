@@ -18,7 +18,7 @@ export class ProductDetail {
   color: string;
 
   @Column({ default: false })
-  @Field(() => Boolean)
+  // @Field(() => Boolean)
   isSoldout: boolean;
 
   @Column()
