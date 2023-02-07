@@ -27,12 +27,12 @@ export class ProductResolver {
   }
 
   @Mutation(() => Product)
-  updateProduct(
+  async updateProduct(
     @Args('productId') productId: string, //
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ) {
-    this.productService.checkSoldout({ productId });
-    return this.productService.update({ productId, updateProductInput });
+    await this.productService.checkSoldout({ productId });
+    return await this.productService.update({ productId, updateProductInput });
   }
 
   @Mutation(() => Boolean)

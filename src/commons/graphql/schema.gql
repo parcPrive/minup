@@ -60,6 +60,7 @@ input CreateProductInput {
   price: Int!
   brand: String!
   productDetail: ProductDetailInput!
+  productCategoryId: String!
 }
 
 input ProductDetailInput {
@@ -74,4 +75,5 @@ input UpdateProductInput {
   price: Int
   brand: String
   productDetail: ProductDetailInput
+  productCategoryId: String
 }

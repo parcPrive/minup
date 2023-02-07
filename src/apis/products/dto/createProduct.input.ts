@@ -17,4 +17,7 @@ export class CreateProductInput {
 
   @Field(() => ProductDetailInput)
   productDetail: ProductDetailInput;
+
+  @Field(() => String)
+  productCategoryId: string;
 }

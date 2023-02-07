@@ -15,20 +15,22 @@ export class ProductService {
   ) {}
 
   async findAll() {
-    return await this.productRepositoty.find({
-      relations: ['productDetail'],
+    const result = await this.productRepositoty.find({
+      relations: ['productDetail', 'productCategory'],
     });
+    console.log(result);
+    return result;
   }
 
   async find({ productId }) {
     return await this.productRepositoty.findOne({
       where: { id: productId },
-      relations: ['productDetail'],
+      relations: ['productDetail', 'productCategory'],
     });
   }
 
   async create({ createProductInput }) {
-    const { productDetail, ...product } = createProductInput;
+    const { productDetail, productCategoryId, ...product } = createProductInput;
     const productD = await this.productDetailRepository.save({
       ...productDetail,
     });
@@ -36,6 +38,7 @@ export class ProductService {
     return await this.productRepositoty.save({
       ...product,
       productDetail: productD,
+      productCategory: { id: productCategoryId },
     });
   }
 
@@ -56,6 +59,7 @@ export class ProductService {
   async checkSoldout({ productId }) {
     const product = await this.productRepositoty.findOne({
       where: { id: productId },
+      relations: ['productDetail', 'productCategory'],
     });
     if (product.productDetail.isSoldout) {
       throw new UnprocessableEntityException('이미 판매되었습니다.');
