@@ -2,6 +2,7 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductDetail } from '../productDetail/entities/productDetail.entity';
+import { ProductTag } from '../productTag/entities/productTag.entity';
 import { Product } from './entities/product.entity';
 
 @Injectable()
@@ -12,11 +13,14 @@ export class ProductService {
 
     @InjectRepository(ProductDetail)
     private readonly productDetailRepository: Repository<ProductDetail>,
+
+    @InjectRepository(ProductTag)
+    private readonly productTagRepository: Repository<ProductTag>,
   ) {}
 
   async findAll() {
     const result = await this.productRepositoty.find({
-      relations: ['productDetail', 'productCategory'],
+      relations: ['productDetail', 'productCategory', 'productTag'],
     });
     console.log(result);
     return result;
@@ -25,21 +29,48 @@ export class ProductService {
   async find({ productId }) {
     return await this.productRepositoty.findOne({
       where: { id: productId },
-      relations: ['productDetail', 'productCategory'],
+      relations: ['productDetail', 'productCategory', 'productTag'],
     });
   }
 
   async create({ createProductInput }) {
-    const { productDetail, productCategoryId, ...product } = createProductInput;
+    const { productDetail, productCategoryId, productTag, ...product } =
+      createProductInput;
     const productD = await this.productDetailRepository.save({
       ...productDetail,
     });
+    const productT = [];
+    for (let i = 0; i < productTag.length; i++) {
+      const tagname = productTag[i].replace('#', '');
+      const Tag = await this.productTagRepository.findOne({
+        where: { tagName: tagname },
+      });
+      if (Tag) {
+        productT.push(Tag);
+      } else {
+        await this.productTagRepository.save({ tagName: tagname });
+        productT.push(tagname);
+      }
+    }
+    // console.log(productT);
 
-    return await this.productRepositoty.save({
+    // return await this.productRepositoty.save({
+    //   ...product,
+    //   productDetail: productD,
+    //   productCategory: { id: productCategoryId },
+    //   productTag: productT,
+    // });
+    // console.log('1111111111111111');
+    const aaa = await this.productRepositoty.save({
       ...product,
       productDetail: productD,
       productCategory: { id: productCategoryId },
+      productTag: productT,
     });
+    console.log('1111111111111111');
+    console.log(aaa);
+    console.log('22222222222222222');
+    return aaa;
   }
 
   async update({ productId, updateProductInput }) {

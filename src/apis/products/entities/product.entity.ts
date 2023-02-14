@@ -9,6 +9,7 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -58,7 +59,7 @@ export class Product {
   @Field(() => ProductEvaluation, { nullable: true })
   productEvaluation: ProductEvaluation;
 
-  @JoinColumn()
+  @JoinTable()
   @ManyToMany(() => ProductTag, (productTag) => productTag.product)
   @Field(() => [ProductTag])
   productTag: ProductTag[];

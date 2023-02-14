@@ -21,12 +21,6 @@ type ProductEvaluation {
   product: Product
 }
 
-type ProductTag {
-  id: String!
-  tagName: String!
-  product: [Product!]!
-}
-
 type Product {
   id: String!
   productName: String!
@@ -37,6 +31,12 @@ type Product {
   productCategory: ProductCategory!
   productEvaluation: ProductEvaluation
   productTag: [ProductTag!]!
+}
+
+type ProductTag {
+  id: String!
+  tagName: String!
+  product: [Product!]!
 }
 
 type Query {
@@ -61,6 +61,7 @@ input CreateProductInput {
   brand: String!
   productDetail: ProductDetailInput!
   productCategoryId: String!
+  productTag: [String!]!
 }
 
 input ProductDetailInput {
@@ -76,4 +77,5 @@ input UpdateProductInput {
   brand: String
   productDetail: ProductDetailInput
   productCategoryId: String
+  productTag: [String!]
 }
