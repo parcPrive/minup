@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: String!
+  email: String!
+}
+
 type ProductCategory {
   id: String!
   name: String!
@@ -44,14 +49,18 @@ type Query {
   fetchCategories: [ProductCategory!]!
   fetchProducts: [Product!]!
   fetchProduct(productId: String!): Product!
+  fetchUser(email: String!): User!
+  fetchUsers: [User!]!
 }
 
 type Mutation {
+  login(email: String!, password: String!): String!
   createCategory(name: String!): ProductCategory!
   deleteCategory(productId: String!): String!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
+  createUser(createUserInput: CreateUserInput!): User!
 }
 
 input CreateProductInput {
@@ -78,4 +87,9 @@ input UpdateProductInput {
   productDetail: ProductDetailInput
   productCategoryId: String
   productTag: [String!]
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
 }
