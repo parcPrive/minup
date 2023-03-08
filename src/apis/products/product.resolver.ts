@@ -15,7 +15,7 @@ export class ProductResolver {
   }
 
   @Query(() => Product)
-  fetchProduct(@Args('productId') productId: string) {
+  async fetchProduct(@Args('productId') productId: string) {
     return this.productService.find({ productId });
   }
 

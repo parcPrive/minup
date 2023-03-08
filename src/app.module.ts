@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './apis/auth/auth.module';
 
 import { ProductCategoryModule } from './apis/productCategory/productCategory.module';
+import { ProductEvaluationModule } from './apis/productEvaluation/productEvaluation.module';
 import { ProductModule } from './apis/products/product.module';
 import { UserModule } from './apis/user/user.module';
 
@@ -12,6 +13,7 @@ import { UserModule } from './apis/user/user.module';
   imports: [
     AuthModule,
     ProductCategoryModule,
+    ProductEvaluationModule,
     ProductModule,
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({

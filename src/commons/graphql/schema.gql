@@ -26,6 +26,12 @@ type ProductEvaluation {
   product: Product
 }
 
+type ProductTag {
+  id: String!
+  tagName: String!
+  product: [Product!]!
+}
+
 type Product {
   id: String!
   productName: String!
@@ -34,14 +40,8 @@ type Product {
   brand: String!
   productDetail: ProductDetail!
   productCategory: ProductCategory!
-  productEvaluation: ProductEvaluation
+  productEvaluation: [ProductEvaluation!]
   productTag: [ProductTag!]!
-}
-
-type ProductTag {
-  id: String!
-  tagName: String!
-  product: [Product!]!
 }
 
 type Query {
@@ -57,10 +57,17 @@ type Mutation {
   login(email: String!, password: String!): String!
   createCategory(name: String!): ProductCategory!
   deleteCategory(productId: String!): String!
+  Evaluation(createProductEvaluationInput: CreateProductEvaluationInput!): ProductEvaluation!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
   createUser(createUserInput: CreateUserInput!): User!
+}
+
+input CreateProductEvaluationInput {
+  review: String!
+  grade: Int!
+  productId: String!
 }
 
 input CreateProductInput {

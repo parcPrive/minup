@@ -20,7 +20,12 @@ export class ProductService {
 
   async findAll() {
     const result = await this.productRepositoty.find({
-      relations: ['productDetail', 'productCategory', 'productTag'],
+      relations: [
+        'productDetail',
+        'productCategory',
+        'productTag',
+        'productEvaluation',
+      ],
     });
     console.log(result);
     return result;
@@ -29,7 +34,12 @@ export class ProductService {
   async find({ productId }) {
     return await this.productRepositoty.findOne({
       where: { id: productId },
-      relations: ['productDetail', 'productCategory', 'productTag'],
+      relations: [
+        'productDetail',
+        'productCategory',
+        'productTag',
+        'productEvaluation',
+      ],
     });
   }
 

@@ -56,8 +56,8 @@ export class Product {
     () => ProductEvaluation,
     (productEvaluation) => productEvaluation.product,
   )
-  @Field(() => ProductEvaluation, { nullable: true })
-  productEvaluation: ProductEvaluation;
+  @Field(() => [ProductEvaluation], { nullable: true })
+  productEvaluation: ProductEvaluation[];
 
   @JoinTable()
   @ManyToMany(() => ProductTag, (productTag) => productTag.product)
