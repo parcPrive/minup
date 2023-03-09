@@ -55,6 +55,7 @@ type Query {
 
 type Mutation {
   login(email: String!, password: String!): String!
+  restoreAccessToken: String!
   createCategory(name: String!): ProductCategory!
   deleteCategory(productId: String!): String!
   Evaluation(createProductEvaluationInput: CreateProductEvaluationInput!): ProductEvaluation!

@@ -3,6 +3,8 @@ import { CreateUserInput } from './dto/craeteUser.input';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
+import { UseGuards } from '@nestjs/common';
+import { GqlAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 @Resolver()
 export class UserResolver {
@@ -18,6 +20,7 @@ export class UserResolver {
     return this.userService.create({ createUserInput, hashedPassword });
   }
 
+  @UseGuards(GqlAccessGuard)
   @Query(() => User)
   fetchUser(
     @Args('email') email: string, //

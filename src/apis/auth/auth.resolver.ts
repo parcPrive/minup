@@ -1,8 +1,16 @@
-import { UnprocessableEntityException } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UnprocessableEntityException, UseGuards } from '@nestjs/common';
+import {
+  Args,
+  Context,
+  GqlExecutionContext,
+  Mutation,
+  Query,
+  Resolver,
+} from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
+import { GqlRefreshGuard } from 'src/commons/auth/gql-auth.guard';
 
 @Resolver()
 export class AuthResolver {
@@ -24,5 +32,13 @@ export class AuthResolver {
     if (!isAuth) throw new UnprocessableEntityException('비밀번호가 틀립니다.');
     this.authService.setRefreshToken({ user, res: context.res });
     return this.authService.getAccessToken({ user });
+  }
+
+  @UseGuards(GqlRefreshGuard)
+  @Mutation(() => String)
+  restoreAccessToken(
+    @Context() context: any, //
+  ) {
+    return this.authService.getAccessToken({ user: context.req.user });
   }
 }
